@@ -100,7 +100,7 @@ class ManagementEnforcerTest extends TestCase
     {
         $e = new Enforcer($this->modelAndPolicyPath . '/rbac_model.conf', $this->modelAndPolicyPath . '/rbac_policy.csv');
         $watcherEx = new SampleWatcherEx();
-        $this->watcher = $watcherEx;
+        $e->watcher = $watcherEx;
 
         $this->assertEquals($e->getPolicy(), [
             ['alice', 'data1', 'read'],
@@ -241,9 +241,9 @@ class ManagementEnforcerTest extends TestCase
         // p, data2_admin, data2, write
         //
         // g, alice, data2_admin
-
         $e = new Enforcer($this->modelAndPolicyPath . '/rbac_model.conf', $this->modelAndPolicyPath . '/rbac_policy.csv');
-
+        $watcherEx = new SampleWatcherEx();
+        $e->watcher = $watcherEx;
         $this->assertTrue($e->hasPolicy('alice', 'data1', 'read'));
         $this->assertFalse($e->hasPolicy('alice', 'data1', 'write'));
         $this->assertTrue($e->hasPolicy('bob', 'data2', 'write'));
@@ -263,5 +263,6 @@ class ManagementEnforcerTest extends TestCase
         $this->assertTrue($e->hasPolicy('alice', 'data1', 'write'));
         $this->assertFalse($e->hasPolicy('bob', 'data2', 'write'));
         $this->assertTrue($e->hasPolicy('bob', 'data2', 'read'));
+        $e->updatePolicies($oldPolicies, $newPolicies);
     }
 }
